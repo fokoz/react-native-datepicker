@@ -7,14 +7,15 @@ import {
   Modal,
   TouchableHighlight,
   DatePickerAndroid,
-  TimePickerAndroid,
   DatePickerIOS,
   Platform,
   Animated,
   Keyboard
 } from 'react-native';
+import {TimePickerAndroid} from '@react-native-community/datetimepicker'
 import Style from './style';
 import Moment from 'moment';
+import invariant from 'invariant';
 
 const FORMATS = {
   'date': 'YYYY-MM-DD',
@@ -27,6 +28,11 @@ const SUPPORTED_ORIENTATIONS = ['portrait', 'portrait-upside-down', 'landscape',
 class DatePicker extends Component {
   constructor(props) {
     super(props);
+
+    if (Platform.OS == 'android') {
+      invariant(TimePickerAndroid,
+      'https://github.com/oatto/datetimepicker.git is required to make DatePicker works.')
+    }
 
     this.state = {
       date: this.getDate(),
@@ -226,8 +232,7 @@ class DatePicker extends Component {
       let timeMoment = Moment(this.state.date);
 
       TimePickerAndroid.open({
-        hour: timeMoment.hour(),
-        minute: timeMoment.minutes(),
+        value: timeMoment,
         is24Hour: is24Hour,
         mode: androidMode
       }).then(this.onDatetimeTimePicked.bind(this, year, month, day));
@@ -279,8 +284,7 @@ class DatePicker extends Component {
         let timeMoment = Moment(this.state.date);
 
         TimePickerAndroid.open({
-          hour: timeMoment.hour(),
-          minute: timeMoment.minutes(),
+          value: timeMoment,
           is24Hour: is24Hour,
           mode: androidMode
         }).then(this.onTimePicked);
