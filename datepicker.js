@@ -229,10 +229,8 @@ class DatePicker extends Component {
     const {mode, androidMode, format = FORMATS[mode], is24Hour = !format.match(/h|a/)} = this.props;
 
     if (action !== DatePickerAndroid.dismissedAction) {
-      let timeMoment = Moment(this.state.date);
-
       TimePickerAndroid.open({
-        value: timeMoment,
+        value: this.state.date,
         is24Hour: is24Hour,
         mode: androidMode
       }).then(this.onDatetimeTimePicked.bind(this, year, month, day));
@@ -279,12 +277,8 @@ class DatePicker extends Component {
           mode: androidMode
         }).then(this.onDatePicked);
       } else if (mode === 'time') {
-        // 选时间
-
-        let timeMoment = Moment(this.state.date);
-
         TimePickerAndroid.open({
-          value: timeMoment,
+          value: this.state.date,
           is24Hour: is24Hour,
           mode: androidMode
         }).then(this.onTimePicked);
